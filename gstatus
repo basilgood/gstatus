@@ -20,28 +20,43 @@ _git_rebase="git rebase"
 _git_rebase_i="git rebase -i"
 _git_rebase_a="git rebase --abort"
 _git_rebase_k="git rebase --continue"
+_git_help="cat <<EOF
+  a: git add file
+  p: git add -p file
+  u: git reset file
+  -: git discard file
+  s: git status -su
+  l: git log
+  b: git branch -a
+  c: git checkout (branch)
+  r: git rebase (branch)
+  i: git rebase -i
+  x: git rebase --abort
+  k: git rebase --continue
+EOF"
 
 gstatus() {
   fzf_status |
     fzf --cycle --no-sort --reverse --tiebreak=index --ansi \
-    --prompt="::$(git branch --show-current)::" \
-    --header $"y to copy hash\n a git add" \
-    --preview="$_git_diff && $_git_diff_status" \
-    --bind "enter:execute:$_git_diff   | less -R" \
-    --bind "d:execute:$_git_diff_status | less -R" \
-    --bind "y:execute:$_git_hash | wl-copy" \
-    --bind "a:execute:$_git_add" \
-    --bind "p:execute:$_git_add_p" \
-    --bind "u:execute:$_git_reset" \
-    --bind "-:execute:$_git_discard" \
-    --bind "s:reload:$_git_status" \
-    --bind "b:reload:$_git_branch" \
-    --bind "l:reload:$_git_log" \
-    --bind "c:reload:$_git_checkout_branch" \
-    --bind "r:reload:$_git_rebase" \
-    --bind "i:reload:$_git_rebase_i" \
-    --bind "x:reload:$_git_rebase_a" \
-    --bind "k:reload:$_git_rebase_k"
-  }
+      --prompt="::$(git branch --show-current)::" \
+      --header $"y to copy hash\n a git add" \
+      --preview="$_git_diff && $_git_diff_status" \
+      --bind "enter:execute:$_git_diff   | less -R" \
+      --bind "d:execute:$_git_diff_status | less -R" \
+      --bind "y:execute:$_git_hash | wl-copy" \
+      --bind "a:execute:$_git_add" \
+      --bind "p:execute:$_git_add_p" \
+      --bind "u:execute:$_git_reset" \
+      --bind "-:execute:$_git_discard" \
+      --bind "s:reload:$_git_status" \
+      --bind "b:reload:$_git_branch" \
+      --bind "l:reload:$_git_log" \
+      --bind "c:reload:$_git_checkout_branch" \
+      --bind "r:reload:$_git_rebase" \
+      --bind "i:reload:$_git_rebase_i" \
+      --bind "x:reload:$_git_rebase_a" \
+      --bind "k:reload:$_git_rebase_k" \
+      --bind "H:reload:$_git_help"
+}
 
 gstatus
