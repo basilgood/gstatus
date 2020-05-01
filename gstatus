@@ -37,10 +37,11 @@ EOF"
 
 gstatus() {
   fzf_status |
-    fzf --cycle --no-sort --reverse --tiebreak=index --ansi \
+    fzf --reverse --multi --ansi --no-sort --tiebreak=index \
       --prompt="::$(git branch --show-current)::" \
       --header $"y to copy hash\n a git add" \
       --preview="$_git_diff && $_git_diff_status" \
+      --bind "ctrl-j:preview-down,ctrl-k:preview-up" \
       --bind "enter:execute:$_git_diff   | less -R" \
       --bind "d:execute:$_git_diff_status | less -R" \
       --bind "y:execute:$_git_hash | wl-copy" \
