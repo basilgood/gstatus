@@ -4,7 +4,7 @@ fzf_status() {
   git -c color.status=always status -su
 }
 
-_git_log="git-foresta --all --style=10"
+_git_log="git-foresta --topo-order --all --style=10"
 _git_hash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
 _git_diff_log="xargs -I % sh -c 'git diff --color=always %'"
 _git_diff_status="cut -c3- | git diff --color=always -- {-1}"
