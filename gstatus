@@ -4,10 +4,13 @@ fzf_status() {
   git -c color.status=always status -su
 }
 
-_git_log="gfor --pretty=format:'%h %s %al' --topo-order --all"
+_git_log="gforesta | less -RSX"
 _git_hash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
-_git_diff_log="xargs -I % sh -c 'git diff --color=always %'"
+_git_diff_log="xargs -I % sh -c 'git show --color=always % | diff-so-fancy'"
 _git_diff_status="( head -1 | cut -f 2 | rev | cut -c 2- | rev |xargs -I % sh -c 'git diff --color=always %')"
+_gitLogLineToHash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
+_viewGitLogLine="$_gitLogLineToHash | xargs -I % sh -c 'git show --color=always % | diff-so-fancy'"
+_viewGitLogLineUnfancy="$_gitLogLineToHash | xargs -I % sh -c 'git show %'"
 
 _git_diff="$_git_hash | $_git_diff_log"
 _git_add="cut -c3- | git add -- {-1}"
@@ -33,12 +36,12 @@ gstatus() {
     fzf --reverse --multi --ansi --no-sort --tiebreak=index \
       --prompt="::$(git branch --show-current)::" \
       --header $"y to copy hash\n a git add" \
-      --bind "enter:execute:$_git_diff_status   | less -R" \
-      --bind "y:execute:$_git_hash | wl-copy" \
-      --bind "a:execute:$_git_add" \
-      --bind "p:execute:$_git_add_p" \
-      --bind "u:execute:$_git_reset" \
-      --bind "-:execute:$_git_discard" \
+      --bind "enter:reload($_git_hash | $_git_diff_log | less -R)" \
+      --bind "y:reload($_git_hash | wl-copy)" \
+      --bind "a:reload($_git_add|$_git_status)" \
+      --bind "p:reload($_git_add_p)" \
+      --bind "u:reload($_git_reset)" \
+      --bind "-:reload($_git_discard)" \
       --bind "s:reload:$_git_status" \
       --bind "b:reload:$_git_branch" \
       --bind "l:reload:$_git_log" \
